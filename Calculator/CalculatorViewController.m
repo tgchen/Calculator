@@ -37,6 +37,11 @@
     
 }
 
+- (IBAction)equalPressed:(UIButton *)sender {
+    double result = [self.brain performOperation:sender.currentTitle];
+    NSString *resultString = [NSString stringWithFormat:@"%g", result];
+    self.display.text=resultString;
+}
 
 
 - (IBAction)enterPressed 
@@ -47,8 +52,7 @@
 }
 - (IBAction)operationPressed:(UIButton *)sender {
     if(self.userIsInTheMiddleOfEnteringNumber){
-        [self.brain pushOperand:[self.display.text doubleValue]];
-        self.userIsInTheMiddleOfEnteringNumber = NO;
+        [self enterPressed];
     } 
     double result = [self.brain performOperation:sender.currentTitle];
     NSString *resultString = [NSString stringWithFormat:@"%g", result];

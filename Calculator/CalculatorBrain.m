@@ -40,14 +40,19 @@
         result =[self popOperand] + [self popOperand];
     }else if([@"-" isEqualToString:operation]){
         result = [self popOperand ] - [self popOperand];
+    }else if([@"=" isEqualToString:operation]){
+        result =[self popOperand];
     }else if([@"C" isEqualToString:operation]){
         [self.operandStack removeAllObjects];
         result =0;
         
     }
+    
     [self pushOperand:result];
+    NSLog(@"%g", result);
     return result;
 }
+
 
 
 @end
