@@ -11,6 +11,8 @@
 
 @interface CalculatorViewController ()
 @property (nonatomic) BOOL userIsInTheMiddleOfEnteringNumber;
+
+
 @property (nonatomic, strong) CalculatorBrain *brain; 
 @end
 
@@ -18,24 +20,42 @@
 
 @synthesize display=_display;
 @synthesize userIsInTheMiddleOfEnteringNumber=_userIsInTheMiddleOfEnteringNumber;
+
+
 @synthesize brain =_brain;
 
 - (CalculatorBrain *) brain{
     if(!_brain) _brain=[[CalculatorBrain alloc] init];
     return _brain;
 }
+
+- (IBAction)dotPressed {
+    if(!self.userIsInTheMiddleOfEnteringNumber){
+        self.display.text = @"0.";
+    } else {
+        NSRange range =[self.display.text rangeOfString:@"."];
+        if(range.location == NSNotFound){
+        self.display.text = [self.display.text stringByAppendingString:@"."];
+        }
+    }
+    self.userIsInTheMiddleOfEnteringNumber=YES;
+}
+
 - (IBAction)digitPressed:(UIButton *)sender {
     NSString *digit = [sender currentTitle];
     
     if(self.userIsInTheMiddleOfEnteringNumber){
-        self.display.text=[self.display.text stringByAppendingString:digit];
+        self.display.text = [self.display.text stringByAppendingString:digit];
     }
     else {
         self.display.text = digit;
         self.userIsInTheMiddleOfEnteringNumber = YES;
+        
     }
     
 }
+
+
 
 - (IBAction)equalPressed:(UIButton *)sender {
     double result = [self.brain performOperation:sender.currentTitle];
@@ -53,11 +73,12 @@
 - (IBAction)operationPressed:(UIButton *)sender {
     if(self.userIsInTheMiddleOfEnteringNumber){
         [self enterPressed];
-    } 
+    }
     double result = [self.brain performOperation:sender.currentTitle];
     NSString *resultString = [NSString stringWithFormat:@"%g", result];
     self.display.text=resultString;
 }
+
 
 
 @end

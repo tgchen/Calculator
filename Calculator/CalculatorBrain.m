@@ -23,7 +23,7 @@
 -(void)pushOperand:(double)operand
 {
     
-        [self.operandStack addObject:[NSNumber numberWithDouble:operand]];
+    [self.operandStack addObject:[NSNumber numberWithDouble:operand]];
 }
 
 -(double) popOperand{
@@ -38,15 +38,27 @@
     
     if([operation isEqualToString:@"+"]){
         result =[self popOperand] + [self popOperand];
+    }else if([@"*" isEqualToString:operation]){
+        result =[self popOperand] * [self popOperand];
     }else if([@"-" isEqualToString:operation]){
         double subResult = [self popOperand];
-        result = [self popOperand ] - subResult;
+        result = [self popOperand] - subResult;
+    }else if([operation isEqualToString:@"/"]){
+        double divisor = [self popOperand];
+        if (divisor) result = [self popOperand]/divisor;
     }else if([@"=" isEqualToString:operation]){
         result =[self popOperand];
     }else if([@"C" isEqualToString:operation]){
         [self.operandStack removeAllObjects];
         result =0;
-        
+    }else if([@"sin" isEqualToString:operation]){
+        result = sin([self popOperand]);
+    }else if ([@"cos" isEqualToString:operation]){
+        result = cos([self popOperand]);
+    }else if ([@"sqrt" isEqualToString:operation]){
+        result = sqrt([self popOperand]);
+    }else if ([@"pi" isEqualToString:operation]){
+        result = M_PI;
     }
     
     [self pushOperand:result];
