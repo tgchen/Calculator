@@ -19,14 +19,22 @@
 @implementation CalculatorViewController
 
 @synthesize display=_display;
-@synthesize userIsInTheMiddleOfEnteringNumber=_userIsInTheMiddleOfEnteringNumber;
+@synthesize calculation = _calculation;
 
+
+@synthesize userIsInTheMiddleOfEnteringNumber=_userIsInTheMiddleOfEnteringNumber;
 
 @synthesize brain =_brain;
 
 - (CalculatorBrain *) brain{
     if(!_brain) _brain=[[CalculatorBrain alloc] init];
     return _brain;
+}
+
+-(void)appearCalculation:(NSString *)text{
+    //self.calculation.text =[self.calculation.text  stringByReplacingOccurrencesOfString:@"= " withString:@""];
+    
+    self.calculation.text = [self.calculation.text stringByAppendingFormat:[NSString stringWithFormat:@"%@ ", text]];
 }
 
 - (IBAction)dotPressed {
@@ -57,16 +65,13 @@
 
 
 
-- (IBAction)equalPressed:(UIButton *)sender {
-    double result = [self.brain performOperation:sender.currentTitle];
-    NSString *resultString = [NSString stringWithFormat:@"%g", result];
-    self.display.text=resultString;
-}
+
 
 
 - (IBAction)enterPressed 
 {
     [self.brain pushOperand:[self.display.text doubleValue]];
+    [self appearCalculation:self.display.text];
     self.userIsInTheMiddleOfEnteringNumber = NO;
     
 }
@@ -74,11 +79,32 @@
     if(self.userIsInTheMiddleOfEnteringNumber){
         [self enterPressed];
     }
-    double result = [self.brain performOperation:sender.currentTitle];
-    NSString *resultString = [NSString stringWithFormat:@"%g", result];
-    self.display.text=resultString;
+    NSString *operation =[sender currentTitle];
+    //[self appearCalculation:[operation stringByAppendingFormat:@" ="]];
+    [self appearCalculation:operation];
+    double result = [self.brain performOperation:operation];
+    
+   self.display.text=[NSString stringWithFormat:@"%g", result];
+  
 }
 
+- (IBAction)clearPressed {
+    [self.brain clear];
+    self.display.text = @"0";
+    self.calculation.text =@"";
+    self.userIsInTheMiddleOfEnteringNumber =NO;
+
+}
+
+- (IBAction)backspacePressed {
+    self.display.text=[self.display.text substringToIndex:[self.display.text length] -1];
+    if( [self.display.text isEqualToString:@""]
+       ||[self.display.text isEqualToString:@"-"]){
+        self.display.text = @"0";
+        self.userIsInTheMiddleOfEnteringNumber =NO;
+    }
+
+}
 
 
 @end
