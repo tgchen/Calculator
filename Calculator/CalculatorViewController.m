@@ -32,7 +32,7 @@
 }
 
 -(void)appearCalculation:(NSString *)text{
-    //self.calculation.text =[self.calculation.text  stringByReplacingOccurrencesOfString:@"= " withString:@""];
+    self.calculation.text =[self.calculation.text  stringByReplacingOccurrencesOfString:@" = " withString:@""];
     
     self.calculation.text = [self.calculation.text stringByAppendingFormat:[NSString stringWithFormat:@"%@ ", text]];
 }
@@ -80,7 +80,7 @@
         [self enterPressed];
     }
     NSString *operation =[sender currentTitle];
-    //[self appearCalculation:[operation stringByAppendingFormat:@" ="]];
+    //self appearCalculation:[operation stringByAppendingFormat:@" = "]];
     [self appearCalculation:operation];
     double result = [self.brain performOperation:operation];
     

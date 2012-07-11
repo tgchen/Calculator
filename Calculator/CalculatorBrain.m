@@ -28,14 +28,18 @@
     [self.programStack addObject:[NSNumber numberWithDouble:operand]];
 }
 
+-(void)pushVariable:(NSString *)variable 
+{
+   [self.programStack addObject:variable];
+}
 
 
 -(double)performOperation:(NSString *)operation
 {
     [self.programStack addObject:operation];
-    return [CalculatorBrain runprogram:self.program];
+    return [CalculatorBrain runProgram:self.program];
 }
-    double result = 0;
+ 
 -(id) program 
 {
     return [self.programStack copy];  
@@ -43,15 +47,38 @@
 
 
 
-+(double) runprogram:(id)program{
++(double) runProgram:(id)program 
+ usingVariableValues:(NSDictionary *)variableVaules {
+    if(![program isKindOfClass:[NSArray class]]) return 0;
     
-    NSMutableArray *stack;
-    if([program isKindOfClass:[NSArray class]]){
-        stack = [program mutableCopy];
-        
+    NSMutableArray *stack=[program mutableCopy];
+    
+    for(int i=0;i<[stack count];i++){
+        id obj=[stack objectAtIndex:i];
+        if([obj isKindOfClass:[NSString class]] && ![self isOperation:obj]){
+            id value = [ variableVaules objectForKey:obj];
+            if (![value isKindOfClass:[NSNumber class]]) {
+                value = [NSNumber numberWithInt:0];
+            }
+            
+        [stack replaceObjectAtIndex:i withObject:value];
+        }
     }
+    
     return [self popOperandOffStack:stack];
 }
+
++(double)runProgram:(id)program{
+    return [self runProgram:program usingVariableValues:nil];
+}
+                
+                
++(BOOL)isOperation:(NSString *)operation {
+ 
+    NSSet *operationSet = [NSSet setWithObjects:@"+", @"*", @"-", @"/",
+                           @"sin", @"cos", @"sqrt", @"pi",nil];
+    return [operationSet containsObject:operation];
+}    
 
 +(double)popOperandOffStack:(NSMutableArray *)stack 
 {
@@ -88,6 +115,18 @@
     return result;
 }
 
++(NSSet *)variableUsedInProgram:(id)program{
+    if(![program isKindOfClass:[NSArray class]]) return nil;
+    
+    NSMutableArray *variables = [NSMutableSet set];
+    
+    for(id obj in program){
+        if([obj isKindOfClass:[NSString class]] && ![self isOperation:obj]){
+            [variables addObject:obj];
+        }
+    }
+    if ([variables count] ==0) return nil; else return [variables copy];
+}
       
 -(void)clear {
     self.programStack = nil;

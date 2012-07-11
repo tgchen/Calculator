@@ -13,8 +13,11 @@
 -(void)pushOperand:(double)operand;
 -(double)performOperation:(NSString *)operation;
 -(void)clear;
+
 @property (readonly) id program;
-+ (double) runprogram:(id)program;
+
++ (double) runProgram:(id)program
+  usingVariableValues:(NSDictionary *)variableValues;
 //+ (NSString *) descriptionOfProgram:(id)program;
 
 @end
