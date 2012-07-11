@@ -101,7 +101,7 @@
 
 }
 
-- (IBAction)testPressed {
+/*- (IBAction)testPressed {
     CalculatorBrain *testBrain = [self brain];
     
     // Setup the brain
@@ -130,7 +130,7 @@
     // List the variables in program 
     NSLog(@"Variables in program are %@", 
           [[CalculatorBrain variablesUsedInProgram:program] description]);        
-}}
+}*/
 
 
 @end

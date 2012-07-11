@@ -85,7 +85,11 @@
     NSSet *operationSet = [NSSet setWithObjects:@"+", @"*", @"-", @"/",
                            @"sin", @"cos", @"sqrt", @"pi",nil];
     return [operationSet containsObject:operation];
-}    
+}   
+
++(BOOL)isNoOperandOperation:(NSString *)operation{
+    
+}
 
 +(double)popOperandOffStack:(NSMutableArray *)stack 
 {
