@@ -63,11 +63,6 @@
     
 }
 
-
-
-
-
-
 - (IBAction)enterPressed 
 {
     [self.brain pushOperand:[self.display.text doubleValue]];
@@ -105,6 +100,37 @@
     }
 
 }
+
+- (IBAction)testPressed {
+    CalculatorBrain *testBrain = [self brain];
+    
+    // Setup the brain
+    [testBrain pushVariable:@"a"];
+    [testBrain pushVariable:@"a"];
+    [testBrain pushOperation:@"*"];
+    [testBrain pushVariable:@"b"];
+    [testBrain pushVariable:@"b"];
+    [testBrain pushOperation:@"*"];
+    [testBrain pushOperation:@"+"];
+    [testBrain pushOperation:@"sqrt"];  
+    
+    // Retrieve the program
+    NSArray *program = testBrain.program;
+    
+    // Setup the dictionary
+    NSDictionary *dictionary = 
+    [NSDictionary dictionaryWithObjectsAndKeys:
+     [NSNumber numberWithDouble:3], @"a",
+     [NSNumber numberWithDouble:4], @"b", nil];
+    
+    // Run the program with variables
+    NSLog(@"Running the program with variables returns the value %g",
+          [CalculatorBrain runProgram:program usingVariableValues:dictionary]);
+    
+    // List the variables in program 
+    NSLog(@"Variables in program are %@", 
+          [[CalculatorBrain variablesUsedInProgram:program] description]);        
+}}
 
 
 @end
