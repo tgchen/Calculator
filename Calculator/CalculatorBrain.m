@@ -83,12 +83,27 @@
 +(BOOL)isOperation:(NSString *)operation {
  
     NSSet *operationSet = [NSSet setWithObjects:@"+", @"*", @"-", @"/",
-                           @"sin", @"cos", @"sqrt", @"pi",nil];
+                           @"sin", @"cos", @"sqrt", @"π",nil];
     return [operationSet containsObject:operation];
 }   
 
 +(BOOL)isNoOperandOperation:(NSString *)operation{
-    
+    NSSet * operationSet = [NSSet setWithObjects:@"π", nil];
+    return [operationSet containsObject:operation];
+}
+
++(BOOL)isOneOperandOperation:(NSString *)operation{
+    NSSet *operationSet = [NSSet setWithObjects:@"sin", @"cos",@"sqrt",nil];
+    return [operationSet containsObject:operation];
+}
+
++(BOOL) isTwoOprandOperation:(NSString *)operation{
+    NSSet * operationSet = [NSSet setWithObjects:@"+", @"-",@"*", @"/", nil];
+    return [operationSet containsObject:operation];
+}
+
++(BOOL) isValidProgram:(id)program{
+    return [program isKindOfClass:[NSArray class]];
 }
 
 +(double)popOperandOffStack:(NSMutableArray *)stack 
@@ -117,7 +132,7 @@
             result = cos([self popOperandOffStack:stack]);
         }else if ([@"sqrt" isEqualToString:operation]){
             result = sqrt([self popOperandOffStack:stack]);
-        }else if ([@"pi" isEqualToString:operation]){
+        }else if ([@"π" isEqualToString:operation]){
             result = M_PI;
         }
 
@@ -142,7 +157,7 @@
 + (NSString *)descriptionOfProgram:(id)program {   
     
     // Check program is valid and if not return message
-    //if (![self isValidProgram:program]) return @"Invalid program!";
+    if (![self isValidProgram:program]) return @"Invalid program!";
     
     NSMutableArray *stack= [program mutableCopy];
     NSMutableArray *expressionArray = [NSMutableArray array];
@@ -189,7 +204,7 @@
         }
         // If the top of stack is a two operand operation then we want to return
         // an expression in the form "x op. y".
-        else if ([self isTwoOperandOperation:topOfStack]) {
+        else if ([self isTwoOprandOperation:topOfStack]) {
             NSString *y = [self descriptionOffTopOfStack:stack];
             NSString *x = [self descriptionOffTopOfStack:stack];
             
