@@ -81,7 +81,10 @@
                 
                 
 +(BOOL)isOperation:(NSString *)operation {
- 
+    
+/*    return ([self isNoOperandOperation:operation] ||
+            [self isOneOperandOperation:operation] ||
+            [self isTwoOprandOperation:operation]);*/
     NSSet *operationSet = [NSSet setWithObjects:@"+", @"*", @"-", @"/",
                            @"sin", @"cos", @"sqrt", @"∏",nil];
     return [operationSet containsObject:operation];
@@ -134,7 +137,7 @@
             result = sqrt([self popOperandOffStack:stack]);
         }else if ([@"∏" isEqualToString:operation]){
             result = M_PI;
-           // NSLog(@"%g",result);
+           
         }
 
     }    

@@ -14,6 +14,7 @@
 -(void)pushVariable:(NSString *)variable;
 -(void)pushOperation:(NSString *)operation;
 -(double)performOperation:(NSString *)operation;
+-(NSSet *)variablesUsedInProgram:(id)program;
 -(void)clear;
 
 @property (readonly) id program;

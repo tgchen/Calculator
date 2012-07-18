@@ -101,36 +101,62 @@
 
 }
 
-/*- (IBAction)testPressed {
+ -(IBAction)testPressed {
     CalculatorBrain *testBrain = [self brain];
     
-    // Setup the brain
-    [testBrain pushVariable:@"a"];
-    [testBrain pushVariable:@"a"];
-    [testBrain pushOperation:@"*"];
-    [testBrain pushVariable:@"b"];
-    [testBrain pushVariable:@"b"];
-    [testBrain pushOperation:@"*"];
-    [testBrain pushOperation:@"+"];
-    [testBrain pushOperation:@"sqrt"];  
+     
+     // Test a
+     //[testBrain empty];
+     [testBrain pushOperand:3];
+     [testBrain pushOperand:5];
+     [testBrain pushOperand:6];
+     [testBrain pushOperand:7];
+     [testBrain pushOperation:@"+"];
+     [testBrain pushOperation:@"*"];
+     [testBrain pushOperation:@"-"];
+     
+     // Test b
+     [testBrain pushOperand:3];
+     [testBrain pushOperand:5];
+     [testBrain pushOperation:@"+"];
+     [testBrain pushOperation:@"sqrt"];
+     
+     // Test c
+     //[testBrain empty];
+     [testBrain pushOperand:3];
+     [testBrain pushOperation:@"sqrt"];
+     [testBrain pushOperation:@"sqrt"];
+     
+     // Test d
+     [testBrain pushOperand:3];
+     [testBrain pushOperand:5];
+     [testBrain pushOperation:@"sqrt"];
+     [testBrain pushOperation:@"+"];
+     
+     // Test e
+     [testBrain pushOperation:@"?"];
+     [testBrain pushVariable:@"r"];
+     [testBrain pushVariable:@"r"];
+     [testBrain pushOperation:@"*"];
+     [testBrain pushOperation:@"*"];
+     
+     // Test f
+     [testBrain pushVariable:@"a"];
+     [testBrain pushVariable:@"a"];
+     [testBrain pushOperation:@"*"];
+     [testBrain pushVariable:@"b"];
+     [testBrain pushVariable:@"b"];
+     [testBrain pushOperation:@"*"];
+     [testBrain pushOperation:@"+"];
+     [testBrain pushOperation:@"sqrt"];
     
-    // Retrieve the program
-    NSArray *program = testBrain.program;
-    
-    // Setup the dictionary
-    NSDictionary *dictionary = 
-    [NSDictionary dictionaryWithObjectsAndKeys:
-     [NSNumber numberWithDouble:3], @"a",
-     [NSNumber numberWithDouble:4], @"b", nil];
-    
-    // Run the program with variables
-    NSLog(@"Running the program with variables returns the value %g",
-          [CalculatorBrain runProgram:program usingVariableValues:dictionary]);
-    
-    // List the variables in program 
-    NSLog(@"Variables in program are %@", 
-          [[CalculatorBrain variablesUsedInProgram:program] description]);        
-}*/
+
+     //Print the description
+     NSLog(@"Program is :%@",[CalculatorBrain descriptionOfProgram:[testBrain program]]);
+     // List the variables in program 
+   // NSLog(@"Variables in program are %@", 
+        //  [[CalculatorBrain variablesUsedInProgram:program] description]);        
+}
 
 
 @end
