@@ -15,7 +15,9 @@
 @end
 
 @implementation CalculatorBrain
+
 @synthesize programStack =_programStack;
+@synthesize program =_program;
 
 -(NSMutableArray *)programStack{
     if(_programStack== nil) _programStack=[[NSMutableArray alloc]init];
@@ -24,7 +26,6 @@
 
 -(void)pushOperand:(double)operand
 {
-    
     [self.programStack addObject:[NSNumber numberWithDouble:operand]];
 }
 
@@ -44,6 +45,7 @@
 -(double)performOperation:(NSString *)operation
 {
     [self.programStack addObject:operation];
+
     return [CalculatorBrain runProgram:self.program];
 }
  
@@ -55,9 +57,10 @@
 
 
 +(double) runProgram:(id)program 
- usingVariableValues:(NSDictionary *)variableVaules {
-    if(![program isKindOfClass:[NSArray class]]) return 0;
-    
+          usingVariableValues:(NSDictionary *)variableVaules {
+    if(![program isKindOfClass:[NSArray class]]) {
+        return 0;
+    }
     NSMutableArray *stack=[program mutableCopy];
     
     for(int i=0;i<[stack count];i++){
@@ -82,9 +85,6 @@
                 
 +(BOOL)isOperation:(NSString *)operation {
     
-/*    return ([self isNoOperandOperation:operation] ||
-            [self isOneOperandOperation:operation] ||
-            [self isTwoOprandOperation:operation]);*/
     NSSet *operationSet = [NSSet setWithObjects:@"+", @"*", @"-", @"/",
                            @"sin", @"cos", @"sqrt", @"∏",nil];
     return [operationSet containsObject:operation];
