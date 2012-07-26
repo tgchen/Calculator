@@ -19,6 +19,7 @@
 -(void) clear;
 
 +(NSString *) descriptionOfProgram:(id)stack;
-
++(double) runProgram:(id)progrm
+          usingVariableValues:(NSDictionary *)variableValues;
 
 @end

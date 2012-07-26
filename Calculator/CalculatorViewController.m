@@ -11,19 +11,17 @@
 
 @interface CalculatorViewController ()
 @property (nonatomic) BOOL userIsInTheMiddleOfEnteringNumber;
-
-
 @property (nonatomic, strong) CalculatorBrain *brain; 
+@property (nonatomic, strong) NSDictionary *testVariableValues;
+
 @end
 
 @implementation CalculatorViewController
 
 @synthesize display=_display;
 @synthesize calculation = _calculation;
-
-
 @synthesize userIsInTheMiddleOfEnteringNumber=_userIsInTheMiddleOfEnteringNumber;
-
+@synthesize testVariableValues=_testVariableValues;
 @synthesize brain =_brain;
 
 - (CalculatorBrain *) brain{
@@ -32,9 +30,22 @@
 }
 
 -(void)appearCalculation:(NSString *)text{
-    self.calculation.text =[self.calculation.text  stringByReplacingOccurrencesOfString:@" = " withString:@""];
+    //self.calculation.text =[self.calculation.text  stringByReplacingOccurrencesOfString:@" = " withString:@""];
     
     self.calculation.text = [self.calculation.text stringByAppendingFormat:[NSString stringWithFormat:@"%@ ", text]];
+}
+
+-(void)syncView{
+    // Find the result by running the program passing in the test variable values
+    id result = [CalculatorBrain runProgram:(self.brain.program) usingVariableValues:(self.testVariableValues)];
+    
+    // If the result is a string, then display it, otherwise get the Number's description
+    if ([result isKindOfClass:[NSString class]]) self.display.text = result;
+    else self.display.text = [NSString stringWithFormat:@"%g", [result doubleValue]];
+    
+    // Now the calculation label, from the latest description of program 
+    self.calculation.text = 
+    [CalculatorBrain descriptionOfProgram:self.brain.program];
 }
 
 - (IBAction)dotPressed {
@@ -101,62 +112,17 @@
 
 }
 
- -(IBAction)testPressed {
-    CalculatorBrain *testBrain = [self brain];
-    
-     
-     // Test a
-     //[testBrain empty];
-     [testBrain pushOperand:3];
-     [testBrain pushOperand:5];
-     [testBrain pushOperand:6];
-     [testBrain pushOperand:7];
-     [testBrain pushOperation:@"+"];
-     [testBrain pushOperation:@"*"];
-     [testBrain pushOperation:@"-"];
-     
-     // Test b
-     [testBrain pushOperand:3];
-     [testBrain pushOperand:5];
-     [testBrain pushOperation:@"+"];
-     [testBrain pushOperation:@"sqrt"];
-     
-     // Test c
-     //[testBrain empty];
-     [testBrain pushOperand:3];
-     [testBrain pushOperation:@"sqrt"];
-     [testBrain pushOperation:@"sqrt"];
-     
-     // Test d
-     [testBrain pushOperand:3];
-     [testBrain pushOperand:5];
-     [testBrain pushOperation:@"sqrt"];
-     [testBrain pushOperation:@"+"];
-     
-     // Test e
-     [testBrain pushOperation:@"?"];
-     [testBrain pushVariable:@"r"];
-     [testBrain pushVariable:@"r"];
-     [testBrain pushOperation:@"*"];
-     [testBrain pushOperation:@"*"];
-     
-     // Test f
-     [testBrain pushVariable:@"a"];
-     [testBrain pushVariable:@"a"];
-     [testBrain pushOperation:@"*"];
-     [testBrain pushVariable:@"b"];
-     [testBrain pushVariable:@"b"];
-     [testBrain pushOperation:@"*"];
-     [testBrain pushOperation:@"+"];
-     [testBrain pushOperation:@"sqrt"];
-    
-
-     //Print the description
-     NSLog(@"Program is :%@",[CalculatorBrain descriptionOfProgram:[testBrain program]]);
-     // List the variables in program 
-   // NSLog(@"Variables in program are %@", 
-        //  [[CalculatorBrain variablesUsedInProgram:program] description]);        
+- (IBAction)variablePressed:(UIButton *)sender {
+    [self.brain pushVariable:sender.currentTitle];
+    [self syncView];
 }
 
+- (IBAction)testPressed {
+    self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:-4], @"x",
+                               [NSNumber numberWithDouble:3], @"a",
+                               [NSNumber numberWithDouble:4], @"b", nil];
+    [self syncView];
+}
 
 @end
