@@ -42,7 +42,7 @@
     self.programStack = nil;
 }
 
--(double)performOperation:(NSString *)operation
+-(id)performOperation:(NSString *)operation
 {
     [self.programStack addObject:operation];
 
@@ -56,7 +56,7 @@
 
 
 
-+(double) runProgram:(id)program 
++(id) runProgram:(id)program 
           usingVariableValues:(NSDictionary *)variableVaules {
     if(![program isKindOfClass:[NSArray class]]) {
         return 0;
@@ -78,7 +78,7 @@
     return [self popOperandOffStack:stack];
 }
 
-+(double)runProgram:(id)program{
++(id)runProgram:(id)program{
     return [self runProgram:program usingVariableValues:nil];
 }
                 
@@ -109,7 +109,7 @@
     return [program isKindOfClass:[NSArray class]];
 }
 
-+(double)popOperandOffStack:(NSMutableArray *)stack 
++(id)popOperandOffStack:(NSMutableArray *)stack 
 {
     double result = 0;
     id topOfStack = [stack lastObject]; 
@@ -120,29 +120,29 @@
     }else if ([topOfStack isKindOfClass:[NSString class]]){
         NSString *operation = topOfStack;
         if([operation isEqualToString:@"+"]){
-            result =[self popOperandOffStack:stack] + [self popOperandOffStack:stack];
+            result =[[self popOperandOffStack:stack] doubleValue] + [[self popOperandOffStack:stack] doubleValue];
         }else if([@"*" isEqualToString:operation]){
-            result =[self popOperandOffStack:stack] * [self popOperandOffStack:stack];
+            result =[[self popOperandOffStack:stack] doubleValue] * [[self popOperandOffStack:stack] doubleValue];
         }else if([@"-" isEqualToString:operation]){
-            double subResult = [self popOperandOffStack:stack];
-            result = [self popOperandOffStack:stack] - subResult;
+            double subResult = [[self popOperandOffStack:stack] doubleValue];
+            result = [[self popOperandOffStack:stack] doubleValue] - subResult;
         }else if([operation isEqualToString:@"/"]){
-            double divisor = [self popOperandOffStack:stack];
-            if (divisor) result = [self popOperandOffStack:stack]/divisor;
+            double divisor = [[self popOperandOffStack:stack] doubleValue];
+            if (divisor) result = [[self popOperandOffStack:stack] doubleValue]/divisor;
         }else if([@"sin" isEqualToString:operation]){
-            result = sin([self popOperandOffStack:stack]);
+            result = sin([[self popOperandOffStack:stack] doubleValue]);
         }else if ([@"cos" isEqualToString:operation]){
-            result = cos([self popOperandOffStack:stack]);
+            result = cos([[self popOperandOffStack:stack] doubleValue]);
         }else if ([@"sqrt" isEqualToString:operation]){
-            result = sqrt([self popOperandOffStack:stack]);
+            result = sqrt([[self popOperandOffStack:stack] doubleValue]);
         }else if ([@"∏" isEqualToString:operation]){
             result = M_PI;
            
         }
 
     }    
-
-    return result;
+    id object = [NSNumber numberWithDouble:result];
+    return object;
 }
 
 +(NSSet *)variableUsedInProgram:(id)program{

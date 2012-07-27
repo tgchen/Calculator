@@ -88,9 +88,9 @@
     NSString *operation =[sender currentTitle];
     //self appearCalculation:[operation stringByAppendingFormat:@" = "]];
     [self appearCalculation:operation];
-    double result = [self.brain performOperation:operation];
+    id result = [self.brain performOperation:operation];
     
-   self.display.text=[NSString stringWithFormat:@"%g", result];
+    self.display.text=[NSString stringWithFormat:@"%g", [result doubleValue]];
   
 }
 

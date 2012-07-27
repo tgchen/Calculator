@@ -15,11 +15,11 @@
 -(void)pushOperand:(double)operand;
 -(void)pushVariable:(NSString *)variable;
 -(void)pushOperation:(NSString *)operation;
--(double)performOperation:(NSString *)operation;
+-(id)performOperation:(NSString *)operation;
 -(void) clear;
 
 +(NSString *) descriptionOfProgram:(id)stack;
-+(double) runProgram:(id)progrm
++(id) runProgram:(id)progrm
           usingVariableValues:(NSDictionary *)variableValues;
 
 @end
