@@ -46,6 +46,28 @@
     // Now the calculation label, from the latest description of program 
     self.calculation.text = 
     [CalculatorBrain descriptionOfProgram:self.brain.program];
+    
+    // And finally the variables text, with a bit of formatting
+    self.variables.text = [[[[[[[self programVariableValues] description]
+                               stringByReplacingOccurrencesOfString:@"{" withString:@""]
+                              stringByReplacingOccurrencesOfString:@"}" withString:@""]
+                             stringByReplacingOccurrencesOfString:@";" withString:@""]
+                            stringByReplacingOccurrencesOfString:@"\"" withString:@""]
+                           stringByReplacingOccurrencesOfString:@"<null>" withString:@"0"];
+    
+    // And the user isn't in the middle of entering a number
+    self.userIsInTheMiddleOfEnteringNumber = NO;
+}
+
+- (NSDictionary *)programVariableValues { 
+    
+    // Find the variables in the current program in the brain as an array
+    NSArray *variableArray = 
+    [[CalculatorBrain variableUsedInProgram:self.brain.program]allObjects];
+    
+    // Return a description of a dictionary which contains keys and values for the keys 
+    // that are in the variable array
+    return [self.testVariableValues dictionaryWithValuesForKeys:variableArray];
 }
 
 - (IBAction)dotPressed {
@@ -91,7 +113,7 @@
     id result = [self.brain performOperation:operation];
     
     self.display.text=[NSString stringWithFormat:@"%g", [result doubleValue]];
-  
+    [self syncView];
 }
 
 - (IBAction)clearPressed {
@@ -99,6 +121,7 @@
     self.display.text = @"0";
     self.calculation.text =@"";
     self.userIsInTheMiddleOfEnteringNumber =NO;
+    
 
 }
 
@@ -109,6 +132,7 @@
         self.display.text = @"0";
         self.userIsInTheMiddleOfEnteringNumber =NO;
     }
+    [self syncView];
 
 }
 

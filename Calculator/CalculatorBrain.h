@@ -21,5 +21,5 @@
 +(NSString *) descriptionOfProgram:(id)stack;
 +(id) runProgram:(id)progrm
           usingVariableValues:(NSDictionary *)variableValues;
-
++(NSSet *)variableUsedInProgram:(id)program;
 @end
